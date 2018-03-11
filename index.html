@@ -5,40 +5,9 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
-    <style>
-      html, body, #map {
-        height: 100%;
-        padding: 0;
-        margin: 0;
-      }
-      #layer_selector {
-        position: absolute;
-        bottom: 40px;
-        left: 20px;
-        padding: 0;
-      }
-      #layer_selector ul {
-        padding: 0; margin: 0;
-        list-style-type: none;
-      }
-      #layer_selector li {
-        border-bottom: 1px solid #999;
-        padding: 15px 30px;
-        font-family: "Helvetica", Arial;
-        font-size: 13px;
-        color: #444;
-        cursor: auto;
-      }
-      #layer_selector li:hover {
-        background-color: #F0F0F0;
-        cursor: pointer;
-      }
-      #layer_selector li.selected {
-        background-color: #EEE;
-      }
-    </style>
-
-    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+    <link rel="stylesheet" href="style/cartodb.css" />
+    <link rel="stylesheet" href="style/styles.css" />
+    
   </head>
   <body>
     <div id="map"></div>
@@ -53,63 +22,8 @@
       </ul>
     </div>
 
-    <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
+    <script src="cartodb.js"></script>
 
-    <script>
-
-      lookups = {}
-      function createSelector(layer, vis) {
-        var sql = new cartodb.SQL({ user: 'documentation' });
-        var $options = $('#layer_selector li');
-        $options.click(function(e) {
-          var $li = $(e.target);
-          var subl = $li.attr('data');
-          $options.removeClass('selected');
-          $li.addClass('selected');
-     
-            console.log(subl)
-
-            var num_sub = vis.getLayers()[1].getSubLayerCount()
-            for (var i=0; i < num_sub; i++) {
-                var subLa = vis.getLayers()[1].getSubLayer(i);
-                console.log(subLa["_position"],lookups,lookups[subl],subl)
-                subLa.hide()
-                if (subLa["_position"] == lookups[subl]) {
-                    subLa.show();
-                
-
-                } 
-            }
-        });
-      }
-      function main() {
-        cartodb.createVis('map', 'https://arminavn.carto.com/api/v2/viz/5804b6df-ca1e-4ca2-b152-2e4a475c1b93/viz.json', {
-          tiles_loader: true,
-          zoom: 4
-        })
-        .done(function(vis, layers) {
-          
-          var num_sublayers = layers[1].getSubLayerCount();
-          console.log(" sublayers in layers ",num_sublayers);
-          for (var i=0; i < num_sublayers; i++) {
-            var subLayer = layers[1].getSubLayer(i);
-            console.log("sublayers position on creation", subLayer["_position"])
-            console.log("sublayers info windo fields ", subLayer["infowindow"]["attributes"]["fields"][0]["name"])
-            lookups[subLayer["infowindow"]["attributes"]["fields"][0]["name"]] = subLayer["_position"]
-            console.log(subLayer)
-            if (subLayer["_position"] == lookups["held_in_alternative_bond_systems"]) {
-                subLayer.show();
-            } else {
-                subLayer.hide()
-            }
-          }
-          createSelector(subLayer,vis);
-        })
-        .error(function(err) {
-          console.log(err);
-        });
-      }
-      window.onload = main;
-    </script>
+    ><script src="index.js"></script>
   </body>
 </html>
