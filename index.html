@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Layer selector example | CartoDB.js</title>
+    <title>usecoalmines</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
@@ -53,43 +53,26 @@
       </ul>
     </div>
 
-    <!-- include cartodb.js library -->
     <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
 
     <script>
-      // create layer selector
 
       lookups = {}
       function createSelector(layer, vis) {
-        // var num_sublayers = layer.getSubLayerCount();
-        // console.log("layer in create selector", layer)
         var sql = new cartodb.SQL({ user: 'documentation' });
         var $options = $('#layer_selector li');
         $options.click(function(e) {
-          // get the area of the selected layer
           var $li = $(e.target);
           var subl = $li.attr('data');
-          // deselect all and select the clicked one
           $options.removeClass('selected');
           $li.addClass('selected');
-          // create query based on data from the layer
-
-        //   var query = "select * from european_countries_e";
-        //   if(area !== 'all') {
-        //     query = "select * from european_countries_e where area > " + area;
-        //   }
-        //   // change the query in the layer to update the map
-        //   layer.setSQL(query);
-        // layer.toggle()
+     
             console.log(subl)
 
-            // console.log(vis.getLayers()[1].getSubLayerCount())
             var num_sub = vis.getLayers()[1].getSubLayerCount()
             for (var i=0; i < num_sub; i++) {
                 var subLa = vis.getLayers()[1].getSubLayer(i);
-                // console.log(subLa)
                 console.log(subLa["_position"],lookups,lookups[subl],subl)
-                // subLayer.show()
                 subLa.hide()
                 if (subLa["_position"] == lookups[subl]) {
                     subLa.show();
@@ -102,12 +85,9 @@
       function main() {
         cartodb.createVis('map', 'https://arminavn.carto.com/api/v2/viz/5804b6df-ca1e-4ca2-b152-2e4a475c1b93/viz.json', {
           tiles_loader: true,
-        //   center_lat: 50,
-        //   center_lon: 20,
           zoom: 4
         })
         .done(function(vis, layers) {
-          // layer 0 is the base layer, layer 1 is cartodb layer
           
           var num_sublayers = layers[1].getSubLayerCount();
           console.log(" sublayers in layers ",num_sublayers);
@@ -117,11 +97,8 @@
             console.log("sublayers info windo fields ", subLayer["infowindow"]["attributes"]["fields"][0]["name"])
             lookups[subLayer["infowindow"]["attributes"]["fields"][0]["name"]] = subLayer["_position"]
             console.log(subLayer)
-            // subLayer.show()
             if (subLayer["_position"] == lookups["held_in_alternative_bond_systems"]) {
                 subLayer.show();
-            
-
             } else {
                 subLayer.hide()
             }
